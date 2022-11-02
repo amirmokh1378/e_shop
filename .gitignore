@@ -1,0 +1,9 @@
+#dir
+
+venv
+__Pycache__
+.idea
+
+#file
+
+e_shop.zip

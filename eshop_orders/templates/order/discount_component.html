@@ -1,0 +1,14 @@
+{% url 'order:discount' as discount %}
+<ul class="user_option">
+    <form action="{{ discount }}" method="post">
+        <li>
+            <h3>استفاده از کوپـن خریـد / کارت تخفیـف :</h3>
+        </li>
+        <li class="single_field zip-field">
+            <input type="text" placeholder="کد تخفیف خود را وارد نمایید ...">
+        </li>
+        <li>
+            <a class="btn btn-default update" href="">بررسی و اعمال</a>
+        </li>
+    </form>
+</ul>

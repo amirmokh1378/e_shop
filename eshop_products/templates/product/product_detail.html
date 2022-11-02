@@ -1,0 +1,442 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load render_partial %}
+{% load static %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-9 padding-right">
+                    <div class="product-details"><!--product-details-->
+                        <div class="col-sm-5">
+                            <div class="view-product">
+                                <img src="{{ object.image.url }}" alt="">
+                                <h3>بزرگنمایـی</h3>
+                            </div>
+                            <div id="similar-product" class="carousel slide" data-ride="carousel">
+
+                                <!-- Wrapper for slides -->
+                                <div class="carousel-inner">
+
+                                    {% for GalleryQu in galleryQuList %}
+                                        <div class=" item {{ forloop.first|yesno:'active,' }} right">
+                                            {% for Gallery in GalleryQu %}
+
+                                                <a href="{{ Gallery.image.url }}"><img style="width: 90px"
+                                                                                       src="{{ Gallery.image.url }}"
+                                                                                       alt=""></a>
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+
+                                    {% comment %}
+                                    <div class="item active left">
+                                        <a href=""><img src="{% static 'images/product-details/similar1.jpg' %}" alt=""></a>
+                                        <a href=""><img src="{% static 'images/product-details/similar2.jpg' %}" alt=""></a>
+                                        <a href=""><img src="{% static 'images/product-details/similar3.jpg' %}" alt=""></a>
+                                    </div>
+
+                                    <div class="item next left">
+                                        <a href=""><img src="{% static 'images/product-details/similar1.jpg' %}" alt=""></a>
+                                        <a href=""><img src="{% static 'images/product-details/similar2.jpg' %}" alt=""></a>
+                                        <a href=""><img src="{% static 'images/product-details/similar3.jpg' %}" alt=""></a>
+                                    </div>
+                                    <div class="item">
+                                        <a href=""><img src="{% static 'images/product-details/similar1.jpg' %}" alt=""></a>
+                                        <a href=""><img src="{% static 'images/product-details/similar2.jpg' %}" alt=""></a>
+                                        <a href=""><img src="{% static 'images/product-details/similar3.jpg' %}" alt=""></a>
+                                    </div>{% endcomment %}
+
+                                </div>
+
+                                <!-- Controls -->
+                                <a class="right item-control" href="#similar-product" data-slide="next">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                                <a class="left item-control" href="#similar-product" data-slide="prev">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="product-information"><!--/product-information-->
+                                <img src="{% static 'images/product-details/new.png' %}" class="newarrival" alt="">
+                                <div>
+                                    <h2>{{ object }}</h2>
+                                    <p>شناسـه : {{ object.id }}</p>
+                                </div>
+                                <div>
+									<span>
+										<span>قیمت : {{ object.price }} تومان</span>
+									</span>
+
+                                    <span>
+                                        <form method="post" action="{% url 'order:order' %} ">
+
+
+                                            {% csrf_token %}
+                                            <input type="hidden" name="product_name" value="{{ object.title }}">
+{#                                            <input type="hidden" name="product_id" value="{{ object.id }}">#}
+                                            {{ orderForm.product_id }}
+                                            {{ orderForm.count.label }}
+                                            {{ orderForm.count }}
+                                            <ul>
+                                                {% for e in orderForm.count.errors %}
+
+                                                    <li class="text-danger">{{ e }}</li>
+
+                                                {% endfor %}
+                                            </ul>
+
+
+
+                                            <button type="submit" class="btn btn-fefault cart">
+											<i class="fa fa-shopping-cart"></i>
+											افـزودن به سبـد خریـد
+										    </button>
+
+                                        </form>
+                                    </span>
+
+                                </div>
+                                <div>
+                                    <p><b>موجـودی :</b> در انبـار موجود می باشد</p>
+                                    <p><b>شرایـط :</b> جدیـد</p>
+                                    <p><b>برنـد :</b> برنـد </p>
+                                </div>
+                                <span class="socials-share share">
+									<ul>
+										<a href="#">
+											<li>
+												<label>بلـه</label>
+												<img src="{% static 'images/product-details/Bale.png' %}">
+											</li>
+										</a>
+										<a href="#">
+											<li>
+												<label>سـروش</label>
+												<img src="{% static 'images/product-details/Soroush.png' %}">
+											</li>
+										</a>
+										<a href="#">
+											<li>
+												<label>اینستاگرام</label>
+												<img src="{% static 'images/product-details/Instagram.png' %}">
+											</li>
+										</a>
+										<li><img src="{% static 'images/product-details/rating.png' %}" alt=""></li>
+									</ul>
+								</span>
+
+                            </div><!--/product-information-->
+                        </div>
+                    </div><!--/product-details-->
+
+                    <div class="category-tab shop-details-tab"><!--category-tab-->
+                        <div class="col-sm-12">
+                            <ul class="nav nav-tabs">
+                                <li><a href="#details" data-toggle="tab">جزئیات</a></li>
+                                <li><a href="#companyprofile" data-toggle="tab">درباره سازنده</a></li>
+                                <li><a href="#tag" data-toggle="tab">برچسب</a></li>
+                                <li class="active"><a href="#reviews" data-toggle="tab">نظرات (5)</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane fade" id="details">
+                                <div class="col-md-12">
+                                    <p>
+                                        {{ object.description }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="companyprofile">
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="{% static 'images/home/gallery.jpg' %}" alt="">
+                                                <h2>1.250.000 ريال</h2>
+                                                <p>توضیحات کوتاه محصول</p>
+                                                <button type="button" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="{% static 'images/home/gallery.jpg' %}" alt="">
+                                                <h2>1.250.000 ريال</h2>
+                                                <p>توضیحات کوتاه محصول</p>
+                                                <button type="button" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="{% static 'images/home/gallery.jpg' %}" alt="">
+                                                <h2>1.250.000 ريال</h2>
+                                                <p>توضیحات کوتاه محصول</p>
+                                                <button type="button" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="{% static 'images/home/gallery.jpg' %}" alt="">
+                                                <h2>1.250.000 ريال</h2>
+                                                <p>توضیحات کوتاه محصول</p>
+                                                <button type="button" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="tag">
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="{% static 'images/home/gallery.jpg' %}" alt="">
+                                                <h2>1.250.000 ريال</h2>
+                                                <p>توضیحات کوتاه محصول</p>
+                                                <button type="button" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="{% static 'images/home/gallery.jpg' %}" alt="">
+                                                <h2>1.250.000 ريال</h2>
+                                                <p>توضیحات کوتاه محصول</p>
+                                                <button type="button" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="{% static 'images/home/gallery.jpg' %}" alt="">
+                                                <h2>1.250.000 ريال</h2>
+                                                <p>توضیحات کوتاه محصول</p>
+                                                <button type="button" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="product-image-wrapper">
+                                        <div class="single-products">
+                                            <div class="productinfo text-center">
+                                                <img src="{% static 'images/home/gallery.jpg' %}" alt="">
+                                                <h2>1.250.000 ريال</h2>
+                                                <p>توضیحات کوتاه محصول</p>
+                                                <button type="button" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>افزودن به سبـد خریـد
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% render_partial 'eshop_comments:comment' %}
+
+                        </div>
+                    </div><!--/category-tab-->
+
+                    <div class="recommended_items"><!--recommended_items-->
+                        <h2 class="title text-center">محصولات پیشنهادی</h2>
+
+                        <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                {% for suggestionProducts in suggestionProductsList %}
+                                    <div class="item {% if forloop.first %} active {% endif %} right ">
+                                        {% for object in suggestionProducts %}
+                                            {% include 'product/product_item_component.html' with a='pull-right' %}
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+
+
+                            </div>
+                            <a class="left recommended-item-control" href="#recommended-item-carousel"
+                               data-slide="prev">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a class="right recommended-item-control" href="#recommended-item-carousel"
+                               data-slide="next">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div><!--/recommended_items-->
+
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        <h2>دسته بندی محصولات</h2>
+                        <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                            {% render_partial 'products:category' %}
+                        </div><!--/category-productsr-->
+
+                        <div class="brands_products"><!--brands_products-->
+                            <h2>برنـد ها</h2>
+                            <div class="brands-name">
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li><a href=""> <span class="pull-left">(50)</span>برنـد 1</a></li>
+                                    <li><a href=""> <span class="pull-left">(56)</span>برنـد 2</a></li>
+                                    <li><a href=""> <span class="pull-left">(27)</span>برنـد 3</a></li>
+                                    <li><a href=""> <span class="pull-left">(32)</span>برنـد 4</a></li>
+                                    <li><a href=""> <span class="pull-left">(5)</span>برنـد 5</a></li>
+                                </ul>
+                            </div>
+                        </div><!--/brands_products-->
+
+                        <div class="price-range"><!--price-range-->
+                            <h2>فیلتـر قیمـت</h2>
+                            <div class="well">
+                                <div class="slider slider-horizontal" style="width: 175px;">
+                                    <div class="slider-track">
+                                        <div class="slider-selection" style="left: 0.025%; width: 0.02%;"></div>
+                                        <div class="slider-handle round left-round" style="left: 0.025%;"></div>
+                                        <div class="slider-handle round" style="left: 0.045%;"></div>
+                                    </div>
+                                    <div class="tooltip top" style="top: -30px; left: -30.9699px;">
+                                        <div class="tooltip-arrow"></div>
+                                        <div class="tooltip-inner">250 : 450</div>
+                                    </div>
+                                    <input type="text" class="span2" value="" data-slider-min="0"
+                                           data-slider-max="1000000" data-slider-step="5" data-slider-value="[250,450]"
+                                           id="sl2" style=""></div>
+                                <br>
+                                <b>1.000.000 ريال</b> <b class="pull-left">0 ريال</b>
+                            </div>
+                        </div><!--/price-range-->
+
+                        <div class="shipping text-center"><!--shipping-->
+                            <img src="{% static 'images/home/shipping.jpg' %}" alt="">
+                        </div><!--/shipping-->
+
+                        <script>
+                            function correct() {
+                                let score = parseInt(document.querySelector('.score').innerHTML);
+                                if (score < 5) {
+                                    document.querySelector('.score').innerHTML = score + 1;
+                                }
+
+                            }
+
+                            function incorrect() {
+                                let score = parseInt(document.querySelector('.score').innerHTML);
+                                console.log(score)
+                                if (score > -5) {
+                                    document.querySelector('.score').innerHTML = score - 1;
+                                }
+
+                            }
+
+                            {#stars#}
+                            const ratings = {
+                                hotel_a: 2.8,
+                                hotel_b: 3.3,
+                                hotel_c: 1.9,
+                                hotel_d: 4.3,
+                                hotel_e: 4.74
+                            };
+                            const starTotal = 5;
+
+                            for (const rating in ratings) {
+                                // 2
+                                const starPercentage = (ratings[rating] / starTotal) * 100;
+                                // 3
+                                const starPercentageRounded = `${(Math.round(starPercentage / 10) * 10)}%`;
+                                // 4
+                                document.querySelector(`.${rating} .stars-inner`).style.width = starPercentageRounded;
+                            }
+                        </script>
+
+                        <button onclick="correct()" class="btn btn-fefault cart">Correct Anwser</button>
+                        <button onclick="incorrect()">False Anwser</button>
+                        <style>
+                            
+
+                            {#    #}
+                            .stars-outer {
+                                display: inline-block;
+                                position: relative;
+                                font-family: FontAwesome;
+                            }
+
+                            .stars-outer::before {
+                                content: "\f006 \f006 \f006 \f006 \f006";
+                            }
+
+                            .stars-inner {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                width: 0;
+                            }
+
+                            .stars-inner::before {
+                                content: "\f005 \f005 \f005 \f005 \f005";
+                                color: #f8ce0b;
+                            }
+
+                            {#    #}
+                            .stars-inner {
+                                width: 0;
+                            }
+                        </style>
+
+
+
+                                    <div class="stars-outer">
+                                        <div class="stars-inner"></div>
+                                    </div>
+
+                        <p>Score: <span class="score">0</span></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+
+
+
+{% endblock %}

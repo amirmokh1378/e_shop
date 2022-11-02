@@ -1,0 +1,11 @@
+
+<div class="panel-group category-products" id="accordian"><!--category-productsr-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% for object in qu %}
+                <h4 class="panel-title"><a href="{% url 'products:products-category' object.name %}">{{ object }}</a></h4>
+            {% endfor %}
+
+        </div>
+    </div>
+</div><!--/category-products-->
